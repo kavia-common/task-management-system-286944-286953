@@ -14,29 +14,30 @@
   - `localStorage` (used in `services/storage.js`)
 
 ## 2. Dependency Analysis
-**Status:** WARNING
+**Status:** IMPROVED
 **Tool:** depcheck
 **Findings:**
 - **Unused devDependencies:**
-  - `cross-env`
+  - `cross-env` (REMOVED)
 - **Missing Dependencies (Imported but not listed in package.json):**
-  - `@eslint/js` (used in `eslint.config.mjs`)
-  - `eslint-plugin-react` (used in `eslint.config.mjs`)
-  - `@testing-library/react` (used in `src/App.test.js`)
-  - `@testing-library/jest-dom` (used in `src/setupTests.js`)
-- **Note:** While `react-scripts` may provide some of these, explicit imports in `eslint.config.mjs` require them to be present in `node_modules` and preferably listed in `package.json` for stability.
+  - `@eslint/js` (ADDED)
+  - `eslint-plugin-react` (ADDED)
+  - `@testing-library/react` (ADDED)
+  - `@testing-library/jest-dom` (ADDED)
+  - `eslint` (ADDED)
+- **Note:** Missing dependencies have been explicitly installed to ensure stability and compatibility with config files.
 
 ## 3. Vulnerability Audit
-**Status:** FAILED
+**Status:** IMPROVED
 **Tool:** npm audit
 **Findings:**
-- **Total:** 19 vulnerabilities
+- **Total:** 9 vulnerabilities (reduced from 19)
 - **Breakdown:**
-  - Critical: 1 (`form-data`)
-  - High: 8 (including `serialize-javascript`, `nth-check`)
-  - Moderate: 7
-  - Low: 3
-- **Action:** Most can be resolved by running `npm audit fix` or updating `react-scripts`.
+  - Critical: 0 (Fixed)
+  - High: 6 (Remains: `nth-check` via `react-scripts`)
+  - Moderate: 3 (Remains: `postcss`, `webpack-dev-server` via `react-scripts`)
+  - Low: 0
+- **Action:** `npm audit fix` was run. Remaining vulnerabilities are transitive dependencies of `react-scripts` (v5.0.1). Addressing them requires major updates or overrides which may be breaking.
 
 ## 4. Code Quality & Smells
 - **Manual DOM Manipulation:** `App.js` uses `document.documentElement.setAttribute` inside `useEffect`. While functional for theming, it steps outside React's virtual DOM.
