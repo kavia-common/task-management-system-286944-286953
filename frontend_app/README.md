@@ -1,82 +1,54 @@
-# Lightweight React Template for KAVIA
+# Ocean To‑Do (Playful)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A single‑page to‑do app with a playful Ocean Professional theme. Local Storage persistence by default, optional API mode via env flags.
 
 ## Features
-
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Create tasks with title (required), notes, and due date
+- List with filters: All, Active, Completed
+- Toggle completion
+- Inline edit title/notes/due date
+- Delete with confirmation
+- Search filter
+- Item counts and Clear Completed
+- Accessible: labels, keyboard navigation, visible focus, aria‑live updates
+- Persistence: localStorage by default; optional API if enabled
 
 ## Getting Started
+- Install dependencies:
+  npm install
+- Run the app:
+  npm start
+- Run tests:
+  npm test
+- Build for production:
+  npm run build
 
-In the project directory, you can run:
+## Environment Variables
+These can be set in .env:
+- REACT_APP_API_BASE: Base URL for backend API (e.g., https://api.example.com)
+- REACT_APP_BACKEND_URL: Alternative name for API base (fallback)
+- REACT_APP_FEATURE_FLAGS: CSV or JSON array of feature flags. Include useApi to enable API mode.
+- Optional:
+  REACT_APP_FRONTEND_URL, REACT_APP_WS_URL, REACT_APP_NODE_ENV, REACT_APP_NEXT_TELEMETRY_DISABLED, REACT_APP_ENABLE_SOURCE_MAPS, REACT_APP_PORT, REACT_APP_TRUST_PROXY, REACT_APP_LOG_LEVEL, REACT_APP_HEALTHCHECK_PATH, REACT_APP_EXPERIMENTS_ENABLED
 
-### `npm start`
+### Enable API mode
+- Set:
+  REACT_APP_FEATURE_FLAGS=useApi
+  REACT_APP_API_BASE=https://your-api.example.com
+- If either the flag or API base is missing, the app uses Local Storage.
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+In development, the console shows a banner indicating the current mode.
 
-### `npm test`
+## Notes
+- Data shape:
+  {
+    id: string,
+    title: string,
+    notes?: string,
+    dueDate?: string (YYYY-MM-DD),
+    completed: boolean,
+    createdAt: ISO string,
+    updatedAt: ISO string
+  }
 
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Storage key: todo.tasks.v1

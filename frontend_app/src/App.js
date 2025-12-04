@@ -1,49 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import './theme.css';
 import './App.css';
+import Header from './components/Header';
+import TaskInput from './components/TaskInput';
+import Filters from './components/Filters';
+import TaskList from './components/TaskList';
+import { useTasks } from './hooks/useTasks';
+import { getEnv } from './env';
 
 // PUBLIC_INTERFACE
-function App() {
+export default function App() {
+  /** Single-page To-Do app with storage default and optional API mode */
   const [theme, setTheme] = useState('light');
 
-  // Effect to apply theme to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
+  const {
+    filtered,
+    loading,
+    filter,
+    setFilter,
+    search,
+    setSearch,
+    activeCount,
+    completedCount,
+    addTask,
+    updateTask,
+    removeTask,
+    toggleTask,
+    clearCompleted,
+    liveRef,
+  } = useTasks();
+
+  const { useApi } = getEnv();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
+    <div className="App appGradient">
+      <div className="themeToggle">
+        <button
+          className="btn subtle"
+          onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
           aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
           {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
         </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </div>
+
+      <div className="container">
+        <Header />
+        <section className="panel" aria-live="polite" aria-atomic="true">
+          <div className="visually-hidden" aria-live="polite" ref={liveRef} />
+          <p className="tagline" role="status">
+            Mode: {useApi ? 'API' : 'Local Storage'}
+          </p>
+          <TaskInput onAdd={addTask} />
+          <Filters
+            filter={filter}
+            setFilter={setFilter}
+            search={search}
+            setSearch={setSearch}
+            activeCount={activeCount}
+            completedCount={completedCount}
+            onClearCompleted={clearCompleted}
+          />
+          {loading ? <p>Loading…</p> : <TaskList tasks={filtered} onToggle={toggleTask} onUpdate={updateTask} onDelete={removeTask} />}
+        </section>
+      </div>
     </div>
   );
 }
-
-export default App;
